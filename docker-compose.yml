@@ -1,0 +1,25 @@
+version: '3.1'
+
+services: 
+  web:
+    image: nginx
+    volumes: 
+      - ./nginx/app.conf:/etc/nginx/nginx.conf
+    depends_on: 
+      - app
+    ports: 
+      - 80:80
+  db: 
+    image: postgres
+    restart: always
+    environment: 
+      POSTGRES_PASSWORD: mysecretpassword
+    volumes: 
+      - ./dados_postgres:/var/lib/postgresql
+    ports: 
+      - 5432:5432
+  app:
+    image: devbergsonjr/app-node-dockerizado:latest
+    build: .
+    depends_on: 
+      - db
